@@ -1,0 +1,150 @@
+
+--docker desktop personal login username
+dockerSm1987
+
+--Checking the wingets first
+winget --version
+
+--Installation of docker
+winget install -e --id Docker.DockerDesktop
+
+--Windows Subsystem for Linux update
+wsl --update
+
+--Install kubectl
+winget install -e --id Kubernetes.kubectl
+
+--it fails in this office PC
+so we have done Kubernetes installation withing DockerDesktop Enable Kubernetes-->select version-->apply,
+This is a internal installation form docker window.
+
+--test port running test after installation (LOCAL Kubernetes CLUSTER)
+kubectl create deployment test-app --image=nginx
+kubectl expose deployment test-app --type=NodePort --port=80
+kubectl get services
+
+--for load balencer setting 
+kubectl scale deployment test-app --replicas=3
+kubectl get pods
+
+--deleteing the kub deployment
+kubectl delete deployment test-app
+
+--Concept	Meaning
+Node =	Machine (server)
+Pod = 	Running container
+Service =	Network access
+Load Balancer =	Traffic distribution
+
+GitHub (Multi-Repo)
+   ↓
+CI/CD
+   ↓
+Docker
+   ↓
+Kubernetes
+   ↓
+Backend | ML | Frontend
+   ↓
+Monitoring
+
+=============================
+Containers layer
+
+✔ Docker installed
+✔ Pulled images
+✔ Understood containers
+==============================
+Orchestration layer
+
+✔ Kubernetes running (via Docker Desktop)
+✔ kubectl working
+✔ Deployment created
+✔ Pod running
+✔ Service + port-forward working
+===============================
+What is a Docker Image?
+
+A Docker Image is a ready-made package that contains:
+
+Application code
+Runtime (like Python, Node, .NET)
+Libraries & dependencies
+OS-level tools
+
+👉 In simple terms:
+Docker Image = Blueprint / Template
+===================================================
+
+What CI/CD should do in YOUR project
+
+For each repo (backend, ml, frontend):
+
+Code push → Build → Docker image → Deploy to Kubernetes
+
+=====================================================
+Frontend
+   ↓
+Backend
+   ↓
+ML Service
+============================================
+
+--dockerfile
+
+--removing the existing dockerfile
+rm Dockerfile
+
+--building docker
+docker build -t fastapi-app .
+
+--deleting docker
+kubectl delete deployment fastapi-app
+kubectl delete service fastapi-app
+
+--check kubernet
+kubectl get nodes
+
+==================docker process flow================
+--Build Docker Image
+docker build -t fastapi-app .
+
+--Verify Image
+docker images
+
+--Start Kubernetes (Docker Desktop)
+👉 Enable Kubernetes in Docker Desktop (one-time)
+
+--Check Cluster
+kubectl get services
+kubectl get nodes
+kubectl logs -l app=fastapi-app
+
+--Create Deployment
+kubectl create deployment fastapi-app --image=fastapi-app:latest
+
+--Fix Local Image Issue(if required)
+kubectl edit deployment fastapi-app
+</> YAML code change
+imagePullPolicy: Never
+
+--Expose Service
+kubectl expose deployment fastapi-app --type=NodePort --port=8000
+
+--Get Service Port
+kubectl get services
+
+--Open in Browser
+http://localhost:31374
+
+--Alternative (always works)
+kubectl port-forward service/fastapi-app 8001:8000
+
+--browser open
+http://localhost:8001/docs
+
+--Final Flow
+Docker build
+→ Kubernetes deployment
+→ Service expose
+→ Browser access ✅

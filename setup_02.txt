@@ -1,0 +1,21 @@
+react install
+
+--Creating .env file
+New-Item .env
+
+REACT_APP_API_URL=http://localhost:8001
+
+
+Important Rule (React)
+
+React only reads variables that start with:
+
+REACT_APP_
+
+So this works ✅:
+
+REACT_APP_API_URL=...
+
+This will NOT work ❌:
+
+API_URL=...
