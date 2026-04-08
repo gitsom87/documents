@@ -97,6 +97,7 @@ rm Dockerfile
 
 --building docker
 docker build -t fastapi-app .
+docker build -t ai-college-ml .
 
 --deleting docker
 kubectl delete deployment fastapi-app
@@ -148,3 +149,41 @@ Docker build
 → Kubernetes deployment
 → Service expose
 → Browser access ✅
+
+--Ingress port forward
+kubectl port-forward svc/ingress-nginx-controller 8080:80 -n ingress-nginx
+
+--Checking pods
+kubectl get pods
+
+--Checking services
+kubectl get svc
+
+--Apply any changes to yml files
+kubectl apply -f ingress.yaml
+
+--Restart deployments
+kubectl rollout restart deployment ai-college-backend
+
+--Total routing for API
+Postman
+   ↓
+ai-college.local:8080
+   ↓
+(Hosts → 127.0.0.1)
+   ↓
+Port Forward
+   ↓
+Ingress (NGINX)
+   ↓
+Backend Service
+   ↓
+Backend Pod (.NET)
+   ↓
+ML Service (ClusterIP)
+   ↓
+ML Pod (FastAPI)
+   ↓
+Prediction
+   ↑
+Back through same path
