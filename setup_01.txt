@@ -187,3 +187,53 @@ ML Pod (FastAPI)
 Prediction
    ↑
 Back through same path
+
+--dotnet add package
+dotnet add package Microsoft.Data.SqlClient
+
+--clean & rebuild
+dotnet clean
+dotnet build
+
+👉 In Kubernetes, you never manually copy code into a pod
+👉 You must update via Docker image + Deployment
+
+docker build -t your-dockerhub/ai-college-backend:latest .
+
+docker build -t ai-college-backend:latest .
+kubectl rollout restart deployment ai-college-backend
+
+Check Image Used by Pod
+kubectl get pods -o wide
+kubectl describe pod <your-backend-pod>
+
+--no cache docker build
+docker build --no-cache -t ai-college-backend:latest .
+
+for applying ingress
+kubectl apply -f ingress.yaml
+host changes(C:\Windows\System32\drivers\etc\hosts)
+127.0.0.1 ai-college.local
+port fwd
+kubectl port-forward svc/ingress-nginx-controller 8080:80 -n ingress-nginx
+
+policy setting for node.js (run powershell as admin)
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+
+react set up for one project folder
+Run clean setup:
+
+npm create vite@latest
+
+Choose:
+
+Project name → collegeFrontendApp
+Framework   → React
+Variant     → TypeScript
+
+Then:
+
+cd collegeFrontendApp
+npm install
+npm run dev
