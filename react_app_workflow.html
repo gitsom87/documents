@@ -1,0 +1,100 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.wrap { padding: 1.5rem 0; }
+.row { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 12px; }
+.step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; margin-top: 2px; }
+.step-body { flex: 1; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 12px 16px; }
+.step-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.step-file { font-size: 11px; font-family: var(--font-mono); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
+.step-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+.arrow { text-align: center; font-size: 18px; color: var(--color-text-secondary); margin: -4px 0 -4px 23px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.ask-btn { margin-top: 1.25rem; font-size: 13px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 14px; cursor: pointer; color: var(--color-text-primary); }
+.ask-btn:hover { background: var(--color-background-secondary); }
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">React app workflow diagram showing how files connect from App.tsx to the API</h2>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>Entry / Page</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div>Component</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#BA7517"></div>Hook</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#533AB7"></div>Service / API</div>
+  </div>
+
+  <div class="row">
+    <div class="step-num" style="background:#E6F1FB;color:#185FA5">1</div>
+    <div class="step-body">
+      <div class="step-file" style="background:#E6F1FB;color:#185FA5">App.tsx</div>
+      <div class="step-title">App entry point</div>
+      <div class="step-desc">The root of your app. React starts here. It renders <code>CollegeRanksPage</code> — think of it as the shell that holds all pages.</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <div class="row">
+    <div class="step-num" style="background:#E6F1FB;color:#185FA5">2</div>
+    <div class="step-body">
+      <div class="step-file" style="background:#E6F1FB;color:#185FA5">pages/CollegeRanksPage.tsx</div>
+      <div class="step-title">Page — layout only</div>
+      <div class="step-desc">Owns the page title and layout. Has no logic of its own — just renders <code>CollegeSearch</code> inside it. Pages compose components, they don't do work themselves.</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <div class="row">
+    <div class="step-num" style="background:#E1F5EE;color:#0F6E56">3</div>
+    <div class="step-body">
+      <div class="step-file" style="background:#E1F5EE;color:#0F6E56">components/search/CollegeSearch.tsx</div>
+      <div class="step-title">Component — user interaction</div>
+      <div class="step-desc">Owns the text input and Search button. When user types and clicks Search, it stores the <code>submittedId</code> in state and passes it down to <code>CollegeRankGrid</code>.</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <div class="row">
+    <div class="step-num" style="background:#E1F5EE;color:#0F6E56">4</div>
+    <div class="step-body">
+      <div class="step-file" style="background:#E1F5EE;color:#0F6E56">components/grid/CollegeRankGrid.tsx</div>
+      <div class="step-title">Component — display only</div>
+      <div class="step-desc">Receives <code>collegeId</code> as a prop. Calls the hook to get data, then renders the MUI DataGrid. This component only cares about displaying — not fetching.</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <div class="row">
+    <div class="step-num" style="background:#FAEEDA;color:#854F0B">5</div>
+    <div class="step-body">
+      <div class="step-file" style="background:#FAEEDA;color:#854F0B">hooks/useCollegeRanks.ts</div>
+      <div class="step-title">Hook — logic &amp; state</div>
+      <div class="step-desc">Manages <code>rows</code>, <code>loading</code>, and <code>error</code> state. Calls the service when <code>collegeId</code> changes. Returns data back to the grid component.</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <div class="row">
+    <div class="step-num" style="background:#EEEDFE;color:#3C3489">6</div>
+    <div class="step-body">
+      <div class="step-file" style="background:#EEEDFE;color:#3C3489">services/collegeService.ts</div>
+      <div class="step-title">Service — API call</div>
+      <div class="step-desc">Makes the actual <code>axios.get</code> call to your backend at <code>ai-college.local:8080</code>. Returns raw data. Has no knowledge of React — pure data fetching only.</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <div class="row">
+    <div class="step-num" style="background:#EEEDFE;color:#3C3489">7</div>
+    <div class="step-body">
+      <div class="step-file" style="background:#EEEDFE;color:#3C3489">models/college.ts</div>
+      <div class="step-title">Model — data shape</div>
+      <div class="step-desc">Defines what a <code>CollegeRank</code> object looks like using TypeScript. Used across hook, service, and grid so everyone agrees on the data structure.</div>
+    </div>
+  </div>
+
+  <button class="ask-btn" onclick="sendPrompt('Can you explain React state and props with a simple example?')">Explain state and props ↗</button>
+</div>
