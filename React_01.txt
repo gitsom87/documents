@@ -1,0 +1,19 @@
+This is because your project has verbatimModuleSyntax 
+enabled in tsconfig.json, which requires interfaces and 
+types to be imported with import type so TypeScript knows it's a 
+type-only import and not a runtime value.
+
+// ❌ current
+import { CollegeRank } from "../models/college";
+
+// ✅ fix
+import type { CollegeRank } from "../models/college";
+
+npm icons MUI
+npm install @mui/icons-material
+
+peer dependencies that v9 requires
+npm install @emotion/react @emotion/styled
+
+Install react-router-dom
+npm install react-router-dom
